@@ -310,9 +310,9 @@ const CONTACTO = { whatsapp: '584121300456', instagram: 'karelynmakeup' };
 const PAGOS = ['Divisa en efectivo (USD)', 'Zelle', 'Binance (USDT)', 'Pago móvil o transferencia en bolívares, a tasa BCV del día'];
 
 const POLITICAS_MAQUILLAJE = [
-  ['Reserva y bloqueo de fecha', 'Ninguna fecha queda bloqueada sin el comprobante del abono correspondiente: 20 USD en social, graduaciones y fotografía; 50 USD en novias y quince años; y 20 USD por cada servicio adicional (mamá, suegra, cortejo, invitadas, estilismo aliado, sesión de prueba o sesión Pre-15).'],
+  ['Reserva y bloqueo de fecha', 'Ninguna fecha queda bloqueada sin el comprobante del abono correspondiente: 20 USD en social, pieles maduras, graduaciones y fotografía; 50 USD en novias y quince años; y 20 USD por cada servicio adicional (mamá, suegra, cortejo, invitadas, estilismo aliado, sesión de prueba o sesión Pre-15).'],
   ['Cancelación del saldo restante', [
-    ['Social, graduaciones y fotografía', 'El monto restante se cancela el mismo día de la cita, antes de iniciar el servicio.'],
+    ['Social, pieles maduras, graduaciones y fotografía', 'El monto restante se cancela el mismo día de la cita, antes de iniciar el servicio.'],
     ['Novias y quince años', 'El monto restante (incluyendo servicios adicionales del paquete) debe estar cancelado como máximo entre 3 y 7 días antes del evento para confirmar cronograma, logística y equipo.']
   ]],
   ['Reprogramaciones y cancelaciones', 'Los abonos no son reembolsables en caso de cancelación o inasistencia por parte de la clienta. Se permite reprogramar la fecha una (1) sola vez notificando con al menos 72 horas de anticipación (sujeto a disponibilidad de agenda). Si se notifica con menos de 24 horas o no se realiza el servicio por ausencia de la clienta, será necesario cubrir el costo total del servicio para una nueva programación.'],
@@ -339,6 +339,13 @@ const CATS = [
       fotos:['social-full-glam-1.jpg','social-full-glam-3.jpg'],
       desc:'Una declaración de estilo audaz y nocturna. Enfocado en magnificar la intensidad de tu mirada (ahumados definidos, toques de brillo o delineados impactantes), complementado con contornos precisos y un acabado deslumbrante.',
       incluye:['Preparación de piel intensiva por zonas','Técnica de impermeabilización anti-sudor','Pestañas personalizadas: corridas o tipo cluster','Guía de preparación "Skin Prep & Glow"','Fotografía de recuerdo'] }
+   ]},
+ { id:'maduras', nombre:'Pieles maduras', corto:'Pieles maduras', linea:'Efecto lifting y luminosidad real', imagen:'fotos/pieles-maduras-1.jpg', imagenAlt:'Maquillaje para piel madura realizado por Karelyn Makeup',
+   intro:'Un maquillaje diseñado para realzar tus facciones, elevar visualmente la mirada y devolver frescura a tu rostro sin marcar líneas de expresión ni recargar la piel.',
+   planes:[
+    { id:'pieles-maduras', nombre:'Pieles Maduras', tag:'Realce, frescura y naturalidad', dur:'A domicilio', d:60, b:70, abono:20, abierto:true,
+      desc:'Pensado para pieles que piden hidratación, luz y ligereza. Productos y técnicas elegidos para acompañar tu piel, no para cubrirla.',
+      incluye:['Preparación profunda de piel: protocolo de hidratación y elasticidad previa para un acabado flexible, cómodo y duradero','Técnicas de efecto lifting: aplicación estratégica de luces, sombras y difuminados ascendentes que estilizan y descansan los rasgos','Texturas ligeras y luminosas: cobertura impecable que unifica el tono sin acartonar, respetando la naturalidad de tu piel','Atención a domicilio en Maracay: un proceso sereno y personalizado en la comodidad de tu hogar'] }
    ]},
  { id:'graduaciones', nombre:'Graduaciones', corto:'Graduaciones', linea:'Actos académicos y fiestas de gala', fotos:['graduacion-1.jpg','graduacion-2.jpg'],
    intro:'Tarifa especial para graduandas. Resistente a flashes, luces y largas horas de celebración, manteniendo la piel fresca desde la entrega del título hasta el final de la fiesta.',
