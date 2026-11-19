@@ -585,7 +585,7 @@ function viewCat(c){
     <p>${esc(x.desc)}</p>
     <button type="button" data-book="${c.id}/${x.id}">Reservar solo este servicio</button>
   </div>`).join('')}` : ''}
-  ${c.cursos ? '' : `<section class="kit"><span class="eyebrow">Kit profesional y marcas de confianza</span><p class="a">Algunas de las marcas que usamos</p><p class="m">${KIT.marcas.map(m => `<span>${esc(m)}</span>`).join(' ')}</p><p class="a o">entre otras marcas profesionales</p><p>${esc(KIT.texto)}</p></section>`}
+  ${c.cursos ? '' : `<section class="kit"><span class="eyebrow">Kit profesional y marcas de confianza</span><p class="a">Algunas de las marcas de mi kit</p><p class="m">${KIT.marcas.map(m => `<span>${esc(m)}</span>`).join(' ')}</p><p class="a o">entre otras marcas profesionales</p><p>${esc(KIT.texto)}</p></section>`}
   <h2 class="sub">${c.cursos ? 'Pagos y políticas' : 'Pagos, políticas y preguntas'}</h2>
   ${infoPagos()}
   <details class="info pol"><summary>Políticas de reserva</summary><ul>${pol.map(([t, d]) => `<li><b class="pt">${esc(t)}</b>${Array.isArray(d) ? d.map(([st, sd]) => `<span class="ps"><b>${esc(st)}:</b> ${esc(sd)}</span>`).join('') : esc(d)}</li>`).join('')}</ul></details>
