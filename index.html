@@ -151,6 +151,11 @@ details.info[open] summary::after{content:"\2212"}
 details.info ul{list-style:none;padding:0 2px 16px}
 details.info li{font-size:.92rem;color:var(--muted);padding:6px 0}
 details.info li b{color:var(--noir);font-weight:500}
+details.pol li{padding:11px 0;line-height:1.5}
+details.pol li+li{border-top:1px solid var(--line)}
+details.info li b.pt{display:block;font-family:var(--sans);font-size:.74rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+details.info li .ps{display:block}
+details.info li .ps+.ps{margin-top:7px}
 .share{margin:26px 0 0;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:10px 0;min-height:44px;text-decoration:underline;text-underline-offset:4px}
 .back{display:inline-block;margin-top:8px;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:12px 0}
 
@@ -305,10 +310,15 @@ const CONTACTO = { whatsapp: '584121300456', instagram: 'karelynmakeup' };
 const PAGOS = ['Divisa en efectivo (USD)', 'Zelle', 'Binance (USDT)', 'Pago móvil o transferencia en bolívares, a tasa BCV del día'];
 
 const POLITICAS_MAQUILLAJE = [
-  ['Reserva', 'Ninguna fecha queda bloqueada sin el comprobante del abono: 20 USD en social, graduaciones, fotografía y quince años; 50 USD en novias; y 20 USD por cada servicio adicional (mamá, suegra, cortejo o invitadas, estilismo, sesión de prueba o sesión Pre-15). El saldo se cancela el día de la cita.'],
-  ['Abonos', 'No son reembolsables en caso de cancelación por parte de la clienta.'],
-  ['Preparación', 'Llega con el rostro limpio, sin cremas ni maquillaje previo. Al reservar recibes tu guía de preparación.'],
-  ['Traslados', 'Los servicios a domicilio aplican dentro del perímetro de Maracay. Fuera de esa zona se cotiza el traslado según la ubicación.']
+  ['Reserva y bloqueo de fecha', 'Ninguna fecha queda bloqueada sin el comprobante del abono correspondiente: 20 USD en social, graduaciones y fotografía; 50 USD en novias y quince años; y 20 USD por cada servicio adicional (mamá, suegra, cortejo, invitadas, estilismo aliado, sesión de prueba o sesión Pre-15).'],
+  ['Cancelación del saldo restante', [
+    ['Social, graduaciones y fotografía', 'El monto restante se cancela el mismo día de la cita, antes de iniciar el servicio.'],
+    ['Novias y quince años', 'El monto restante (incluyendo servicios adicionales del paquete) debe estar cancelado como máximo entre 3 y 7 días antes del evento para confirmar cronograma, logística y equipo.']
+  ]],
+  ['Reprogramaciones y cancelaciones', 'Los abonos no son reembolsables en caso de cancelación o inasistencia por parte de la clienta. Se permite reprogramar la fecha una (1) sola vez notificando con al menos 72 horas de anticipación (sujeto a disponibilidad de agenda). Si se notifica con menos de 24 horas o no se realiza el servicio por ausencia de la clienta, será necesario cubrir el costo total del servicio para una nueva programación.'],
+  ['Preparación y disponibilidad', 'Al momento de nuestra llegada, la clienta debe estar disponible con el rostro limpio, sin cremas ni maquillaje previo (y en servicios con peinado o estilismo, con el cabello limpio y seco según la guía de preparación enviada al reservar).'],
+  ['Traslados y locación', 'Los servicios a domicilio aplican dentro del perímetro de Maracay. Fuera de esa zona o para eventos foráneos o bodas destino se cotiza el traslado y viáticos según ubicación y horario.'],
+  ['Conformidad', 'Al realizar tu abono y confirmar tu reserva, aceptas estas políticas de agenda y servicio.']
 ];
 const POLITICAS_CURSOS = [
   ['Bloqueo de cupo', 'Ningún cupo o fecha de clase queda reservado sin el comprobante del abono: 20 USD para los niveles 1 y 2 y la Beauty Party; 50 USD para el nivel 3. El saldo se cancela el día de la primera sesión, antes de iniciar.'],
@@ -369,7 +379,7 @@ const CATS = [
  { id:'quince', nombre:'Quince años', corto:'Quince años', linea:'Princesas KMA', fotos:['quince-3.jpg','quince-1.jpg','quince-4.jpg'],
    intro:'Un homenaje a la juventud, la ilusión y la elegancia. Maquillajes diseñados para que la quinceañera brille con luz propia, cómoda, fresca y segura durante toda su celebración.',
    planes:[
-    { id:'princesa', nombre:'Princesa KMA', tag:'Experiencia quinceañera a domicilio', dur:'2 h · A domicilio', d:90, b:105, abono:20, abierto:true,
+    { id:'princesa', nombre:'Princesa KMA', tag:'Experiencia quinceañera a domicilio', dur:'2 h · A domicilio', d:90, b:105, abono:50, abierto:true,
       desc:'Nuestra experiencia insignia para el gran día. Un maquillaje romántico, luminoso y delicado, adaptado a sus facciones juveniles y diseñado para resistir abrazos, emociones y horas de baile.',
       incluye:['Traslado dentro del perímetro de Maracay','Preparación dermatológica adaptada a piel joven','Maquillaje de alta resistencia y larga duración: a prueba de sudor y roces','Brillo y glow sutil en escote y hombros','Pestañas personalizadas: tipo cluster por segmentos o corridas de acabado natural','Kit de retoque post-aplicación para la fiesta'],
       regalo:'Regalo al reservar: Guía de Preparación Juvenil (PDF), con consejos para el cuidado de la piel y pautas previas.' }
@@ -547,7 +557,7 @@ function viewCat(c){
   </div>`).join('')}` : ''}
   <h2 class="sub">Pagos y políticas</h2>
   ${infoPagos()}
-  <details class="info"><summary>Políticas de reserva</summary><ul>${pol.map(([t, d]) => `<li><b>${esc(t)}:</b> ${esc(d)}</li>`).join('')}</ul></details>
+  <details class="info pol"><summary>Políticas de reserva</summary><ul>${pol.map(([t, d]) => `<li><b class="pt">${esc(t)}</b>${Array.isArray(d) ? d.map(([st, sd]) => `<span class="ps"><b>${esc(st)}:</b> ${esc(sd)}</span>`).join('') : esc(d)}</li>`).join('')}</ul></details>
   <a class="btn ghost" style="margin-top:26px" target="_blank" rel="noopener" href="${waText('Hola Karelyn! Tengo una consulta sobre ' + c.nombre + '.')}">Tengo una duda, escribir por WhatsApp</a>
   <button class="share" type="button" data-share="${c.id}">Copiar el enlace de esta sección</button><br>
   <a class="back" href="#inicio">&larr; Ver todos los servicios</a>`;
