@@ -154,6 +154,7 @@ details.info li b{color:var(--noir);font-weight:500}
 details.pol li{padding:11px 0;line-height:1.5}
 details.pol li+li{border-top:1px solid var(--line)}
 details.info li b.pt{display:block;font-family:var(--sans);font-size:.74rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+details.info li b.pq{display:block;font-family:var(--serif);font-size:1.12rem;font-weight:500;line-height:1.3;color:var(--noir);margin-bottom:6px}
 details.info li .ps{display:block}
 details.info li .ps+.ps{margin-top:7px}
 .share{margin:26px 0 0;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:10px 0;min-height:44px;text-decoration:underline;text-underline-offset:4px}
@@ -325,6 +326,15 @@ const POLITICAS_CURSOS = [
   ['Modalidad y traslado', 'Todas las experiencias son 100% prácticas y a domicilio, con traslado incluido dentro del perímetro de Maracay.'],
   ['Reprogramaciones', 'Se notifican con un mínimo de 72 horas de anticipación. De lo contrario la clase no podrá recuperarse y deberá abonarse nuevamente para una nueva fecha.'],
   ['Reembolsos', 'Los abonos no son reembolsables ni transferibles.']
+];
+
+const PREGUNTAS = [
+  ['El maquillaje me va a durar todo el evento o todo el día (por ejemplo, en graduaciones)?', 'Sí. Trabajamos con protocolos de preparación de piel según cada necesidad y técnicas de sellado de alta duración, diseñadas para resistir jornadas largas (desde actos en la mañana hasta celebraciones en la noche), el clima de Maracay, las lágrimas de emoción y la fotografía con flash.'],
+  ['Si tengo piel grasa, el maquillaje se mantiene intacto?', 'Totalmente. En pieles mixtas o grasas realizamos una preparación específica enfocada en equilibrar la hidratación y controlar el brillo en zonas clave, utilizando fórmulas de larga duración y fijación estratégica para que el acabado se mantenga fresco, uniforme y sin sensación pesada.'],
+  ['El maquillaje necesita retoques durante el evento?', 'La estructura del maquillaje está trabajada para mantenerse firme y duradera durante toda la jornada, incluyendo los labios, que aplicamos con técnicas de larga duración para que resistan horas sin necesidad de retoques constantes. Sin embargo, debido al clima cálido y húmedo de Maracay, es completamente normal que con el paso de las horas aparezca algo de brillo natural. Para controlarlo sin recargar la piel, recomendamos llevar papel absorbente (blotting paper), un polvo matificante traslúcido o una borla con una mínima cantidad de tu polvo habitual, para dar toquecitos suaves solo en las zonas con brillo.'],
+  ['Con cuánta anticipación debo maquillarme antes de salir?', 'Recomendamos finalizar tu maquillaje al menos 1 hora antes de la hora en que debas estar completamente lista (vestida, con accesorios y lista para salir o tomar fotos). Por ejemplo: si debes estar lista a las 7:00 p. m., lo ideal es que tu maquillaje termine alrededor de las 6:00 p. m., lo que significa iniciar tu cita entre las 4:30 p. m. y las 4:45 p. m. Así evitamos carreras al vestirte y cuidamos cada detalle sin estrés.'],
+  ['Qué va primero: el maquillaje o el estilismo (peinado)?', 'Por regla general, y para cuidar el acabado de la piel, primero se realiza el estilismo (peinado) y luego el maquillaje. El calor de las herramientas térmicas (secador, tenaza o plancha) y los productos de fijación capilar pueden afectar la preparación previa del rostro si se hacen después. En caso de ondas muy suaves o recogidos finales sin calor directo sobre el rostro, coordinamos el orden según el cronograma.'],
+  ['Si tengo el tiempo ajustado, puedo atenderme maquillaje y estilismo al mismo tiempo?', 'Sí, es posible trabajar en simultáneo cuando el cronograma lo requiere y el servicio incluye estilismo aliado, siempre que el espacio cuente con buena iluminación, comodidad y tomas de corriente cercanas. En casos de tiempo muy justo, recomendamos comentarlo y solicitarlo al reservar, para organizar el equipo y asegurar que ambos servicios fluyan sin comprometer la calidad.']
 ];
 
 const CATS = [
@@ -562,9 +572,10 @@ function viewCat(c){
     <p>${esc(x.desc)}</p>
     <button type="button" data-book="${c.id}/${x.id}">Reservar solo este servicio</button>
   </div>`).join('')}` : ''}
-  <h2 class="sub">Pagos y políticas</h2>
+  <h2 class="sub">${c.cursos ? 'Pagos y políticas' : 'Pagos, políticas y preguntas'}</h2>
   ${infoPagos()}
   <details class="info pol"><summary>Políticas de reserva</summary><ul>${pol.map(([t, d]) => `<li><b class="pt">${esc(t)}</b>${Array.isArray(d) ? d.map(([st, sd]) => `<span class="ps"><b>${esc(st)}:</b> ${esc(sd)}</span>`).join('') : esc(d)}</li>`).join('')}</ul></details>
+  ${c.cursos ? '' : `<details class="info pol faq"><summary>Preguntas frecuentes</summary><ul>${PREGUNTAS.map(([q, r]) => `<li><b class="pq">${esc(q)}</b>${esc(r)}</li>`).join('')}</ul></details>`}
   <a class="btn ghost" style="margin-top:26px" target="_blank" rel="noopener" href="${waText('Hola Karelyn! Tengo una consulta sobre ' + c.nombre + '.')}">Tengo una duda, escribir por WhatsApp</a>
   <button class="share" type="button" data-share="${c.id}">Copiar el enlace de esta sección</button><br>
   <a class="back" href="#inicio">&larr; Ver todos los servicios</a>`;
