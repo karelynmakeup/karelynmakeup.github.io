@@ -155,6 +155,11 @@ details.pol li{padding:11px 0;line-height:1.5}
 details.pol li+li{border-top:1px solid var(--line)}
 details.info li b.pt{display:block;font-family:var(--sans);font-size:.74rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
 details.info li b.pq{display:block;font-family:var(--serif);font-size:1.12rem;font-weight:500;line-height:1.3;color:var(--noir);margin-bottom:6px}
+.kit{margin:34px 0 0;padding:26px 20px 24px;background:var(--sand);text-align:center}
+.kit .m{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--accent-soft);border:1px solid var(--accent-soft);margin:16px 0 18px}
+.kit .m span{background:var(--sand);padding:11px 6px;font-family:var(--serif);font-size:.86rem;letter-spacing:.12em;text-transform:uppercase;color:var(--noir);line-height:1.3}
+.kit .m span:last-child:nth-child(odd){grid-column:1/-1}
+.kit p:last-child{font-size:.9rem;color:var(--muted);line-height:1.55}
 details.info li .ps{display:block}
 details.info li .ps+.ps{margin-top:7px}
 .share{margin:26px 0 0;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:10px 0;min-height:44px;text-decoration:underline;text-underline-offset:4px}
@@ -327,6 +332,11 @@ const POLITICAS_CURSOS = [
   ['Reprogramaciones', 'Se notifican con un mínimo de 72 horas de anticipación. De lo contrario la clase no podrá recuperarse y deberá abonarse nuevamente para una nueva fecha.'],
   ['Reembolsos', 'Los abonos no son reembolsables ni transferibles.']
 ];
+
+const KIT = {
+  marcas:['Bioderma','Charlotte Tilbury','Makeup by Mario','Pat McGrath Labs','Patrick Ta','One/Size','MAC Cosmetics'],
+  texto:'Cada servicio se realiza con productos originales de alto rendimiento en preparación de piel, acabado y larga duración. La selección exacta de fórmulas se adapta de forma personalizada a tu tipo de piel, el acabado deseado y las condiciones de cada evento.'
+};
 
 const PREGUNTAS = [
   ['El maquillaje me va a durar todo el evento o todo el día (por ejemplo, en graduaciones)?', 'Sí. Trabajamos con protocolos de preparación de piel según cada necesidad y técnicas de sellado de alta duración, diseñadas para resistir jornadas largas (desde actos en la mañana hasta celebraciones en la noche), el clima de Maracay, las lágrimas de emoción y la fotografía con flash.'],
@@ -572,6 +582,7 @@ function viewCat(c){
     <p>${esc(x.desc)}</p>
     <button type="button" data-book="${c.id}/${x.id}">Reservar solo este servicio</button>
   </div>`).join('')}` : ''}
+  ${c.cursos ? '' : `<section class="kit"><span class="eyebrow">Kit profesional y marcas de confianza</span><p class="m">${KIT.marcas.map(m => `<span>${esc(m)}</span>`).join(' ')}</p><p>${esc(KIT.texto)}</p></section>`}
   <h2 class="sub">${c.cursos ? 'Pagos y políticas' : 'Pagos, políticas y preguntas'}</h2>
   ${infoPagos()}
   <details class="info pol"><summary>Políticas de reserva</summary><ul>${pol.map(([t, d]) => `<li><b class="pt">${esc(t)}</b>${Array.isArray(d) ? d.map(([st, sd]) => `<span class="ps"><b>${esc(st)}:</b> ${esc(sd)}</span>`).join('') : esc(d)}</li>`).join('')}</ul></details>
