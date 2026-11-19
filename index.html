@@ -201,6 +201,21 @@ textarea.in{min-height:76px;resize:vertical}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--noir);color:var(--white);padding:12px 18px;font-size:.84rem;z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
 .toast.on{opacity:1}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.toast{transition:none}}
+
+/* promo de temporada */
+:root{--vino:#6E1A2B}
+.promo-home{display:flex;align-items:center;gap:16px;margin:0 0 26px;padding:18px 18px;border:1px solid var(--vino);background:var(--white);color:var(--noir);text-decoration:none}
+.promo-home svg,.promo-top svg{flex:none;color:var(--vino)}
+.promo-home svg{width:46px;height:auto}
+.promo-home .e,.promo-top .e{display:block;font:500 11px/1.4 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--vino)}
+.promo-home .t{display:block;font:500 22px/1.15 var(--serif);margin:4px 0 3px}
+.promo-home .s{display:block;font:400 13px/1.4 var(--sans);color:var(--muted)}
+.promo-home .go{margin-left:auto;font:400 22px/1 var(--serif);color:var(--vino)}
+.promo-top{display:flex;flex-direction:column;align-items:center;gap:8px;padding:26px 18px 22px;text-align:center;background:var(--sand);border:1px solid var(--vino);border-bottom:0}
+.promo-top svg{width:74px;height:auto}
+.promo-top .l{font:italic 400 17px/1.3 var(--serif);color:var(--noir)}
+details.plan.promo{border-color:var(--vino)}
+s.antes{font-size:.62em;color:var(--muted);text-decoration-thickness:1px;margin-right:6px;font-weight:400}
 </style>
 </head>
 <body>
@@ -401,6 +416,25 @@ const CATS = [
    ]}
 ];
 
+/* ============================== promo =============================== */
+// Promo de temporada. Aparece sola el dia `visible` y se quita sola al terminar `pagoHasta`
+// (hora de Venezuela). Para verla antes de tiempo: abrir la web con ?promo=ver
+const PROMO = {
+  visible:'2026-11-24', pagoHasta:'2026-11-30', cat:'social',
+  plan:{ id:'soft-glam-navidad', promo:true, nombre:'Soft Glam Edición Navidad', tag:'Precio especial pagando del 27 al 30 de noviembre', dur:'1 h 30 min',
+    d:50, b:60, antes:{ d:60, b:70 }, abono:0, pagoCompleto:'pago completo del 27 al 30 de noviembre', fmin:'2026-12-01', fmax:'2026-12-31',
+    desc:'Tu maquillaje para las fiestas de diciembre, a precio especial. Es el mismo Soft Glam de siempre: piel fresca y pulida, cejas enmarcadas, sellado de larga duración y pestañas personalizadas, listo para cenas, brindis y fotos.',
+    listaTitulo:'Condiciones',
+    incluye:['Precio especial pagando el servicio completo entre el viernes 27 y el lunes 30 de noviembre de 2026','Válido para maquillajes sociales Soft Glam con fecha del 1 al 31 de diciembre de 2026','Aplica solo en Maracay. No aplica para zonas aledañas','La fecha y la hora se confirman según disponibilidad','Después del 30 de noviembre aplica la tarifa regular'] }
+};
+const LAZO = '<svg viewBox="0 0 64 46" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 19c-6-9-16-13-22-10-5 3-4 14 2 17 6 3 14-1 20-7z"/><path d="M32 19c6-9 16-13 22-10 5 3 4 14-2 17-6 3-14-1-20-7z"/><path d="M30.500 21.500c-2 7-7 14-13 20M33.500 21.500c2 7 7 14 13 20"/><circle cx="32" cy="19.500" r="2.600"/></svg>';
+const promoOn = (() => {
+  if (/[?&]promo=ver/.test(location.search)) return true;
+  const now = Date.now();
+  return now >= Date.parse(PROMO.visible + 'T00:00:00-04:00') && now < Date.parse(PROMO.pagoHasta + 'T00:00:00-04:00') + 864e5;
+})();
+if (promoOn) CATS.find(c => c.id === PROMO.cat).planes.unshift(PROMO.plan);
+
 /* ============================ utilidades ============================ */
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -431,6 +465,7 @@ function viewHome(){
     <h1>Maquillaje que empodera, confianza que <em>inspira</em>.</h1>
     <p>Elige lo que buscas para ver cada servicio con su inversión, y reserva tu fecha por WhatsApp en un minuto.</p>
   </section>
+  ${promoOn ? `<a class="promo-home" href="#navidad">${LAZO}<span><span class="e">Edición Navidad</span><span class="t">Tu Soft Glam de diciembre, a precio especial</span><span class="s">Pagando del 27 al 30 de noviembre</span></span><span class="go" aria-hidden="true">→</span></a>` : ''}
   <ul class="menu">
     ${CATS.map((c, i) => `<li><a href="#${c.id}">
       <span class="n">${String(i + 1).padStart(2, '0')}</span>
@@ -468,8 +503,8 @@ function infoPagos(){
 function priceBox(p){
   const u = p.porPersona ? ' por persona' : (p.cu ? ' c/u' : '');
   return `<div class="prices">
-    <div><span>Inversión</span><b>${usd(p.b)}</b><small>Pago en Bs. a tasa BCV del día${u}</small></div>
-    <div><span>Tarifa preferencial</span><b>${usd(p.d)}</b><small>Divisa en efectivo, Zelle o Binance${u}</small></div>
+    <div><span>Inversión</span><b>${p.antes ? `<s class="antes">${usd(p.antes.b)}</s>` : ''}${usd(p.b)}</b><small>Pago en Bs. a tasa BCV del día${u}</small></div>
+    <div><span>Tarifa preferencial</span><b>${p.antes ? `<s class="antes">${usd(p.antes.d)}</s>` : ''}${usd(p.d)}</b><small>Divisa en efectivo, Zelle o Binance${u}</small></div>
   </div>`;
 }
 
@@ -486,10 +521,11 @@ function viewCat(c){
   <h2 class="sub">${c.cursos ? 'Elige tu nivel' : (c.planes.length > 1 ? 'Elige tu estilo' : 'La experiencia')}</h2>
   ${c.planes.map(p => `
   ${p.fotos ? `<div class="pfotos n${p.fotos.length}">${p.fotos.map(f => `<img src="fotos/${f}" alt="Maquillaje ${esc(p.nombre)} realizado por Karelyn Makeup" loading="lazy" onerror="this.remove()">`).join('')}</div>` : ''}
-  <details class="plan" ${p.abierto ? 'open' : ''}>
+  ${p.promo ? `<div class="promo-top" id="promo">${LAZO}<span class="e">Edición Navidad</span><span class="l">Un regalo para tus fiestas de diciembre</span></div>` : ''}
+  <details class="plan${p.promo ? ' promo' : ''}" ${p.abierto ? 'open' : ''}>
     <summary>
       <span>${p.dur ? `<span class="dur">${esc(p.dur)}</span>` : ''}<span class="name">${esc(p.nombre)}</span><span class="tag">${esc(p.tag)}</span></span>
-      <span class="from">${p.porPersona ? 'Por persona' : 'Preferencial'}<b>${usd(p.d)}</b><i><span class="more">Ver detalle +</span><span class="less">Cerrar</span></i></span>
+      <span class="from">${p.porPersona ? 'Por persona' : 'Preferencial'}<b>${p.antes ? `<s class="antes">${usd(p.antes.d)}</s>` : ''}${usd(p.d)}</b><i><span class="more">Ver detalle +</span><span class="less">Cerrar</span></i></span>
     </summary>
     <div class="plan-body">
       <p>${esc(p.desc)}</p>
@@ -519,7 +555,8 @@ function viewCat(c){
 
 function route(){
   const id = location.hash.replace('#', '');
-  const c = catById(id);
+  const irPromo = id === 'navidad';
+  const c = catById(irPromo ? PROMO.cat : id);
   $('#app').innerHTML = c ? viewCat(c) : viewHome();
   $('#chips').hidden = !c;
   document.querySelectorAll('[data-chip]').forEach(a => {
@@ -529,6 +566,8 @@ function route(){
   });
   document.title = (c ? c.nombre + ' | ' : '') + 'Karelyn Makeup';
   window.scrollTo(0, 0);
+  const pt = irPromo && $('#promo');
+  if (pt) { pt.nextElementSibling.open = true; pt.scrollIntoView({ block:'start' }); window.scrollBy(0, -130); }
 }
 window.addEventListener('hashchange', route);
 route();
@@ -556,7 +595,10 @@ function openBooking(catId, itemId){
     <div class="qty"><button type="button" data-ex="${x.id}" data-step="-1" aria-label="Quitar">&minus;</button><output id="q-${x.id}">0</output><button type="button" data-ex="${x.id}" data-step="1" aria-label="Agregar">+</button></div></div>`).join('');
   $('#fTimeL').textContent = c.cursos ? 'Hora preferida' : 'Hora en que debo estar lista';
   const t = new Date(); t.setMinutes(t.getMinutes() - t.getTimezoneOffset());
-  $('#fDate').min = t.toISOString().slice(0, 10);
+  const hoy = t.toISOString().slice(0, 10);
+  $('#fDate').min = it.fmin && it.fmin > hoy ? it.fmin : hoy;
+  $('#fDate').max = it.fmax || '';
+  $('#fDate').value = '';
   calc();
   sheet.showModal();
   $('.sheet-body').scrollTop = 0;
@@ -579,7 +621,7 @@ function calc(){
   $('#totL').textContent = bs ? 'Total de referencia' : 'Total preferencial';
   $('#totV').textContent = R.total;
   $('#totN').textContent = bs ? 'Se paga en Bs. a la tasa BCV del día' : 'Divisa en efectivo, Zelle o Binance';
-  $('#depV').textContent = 'Abono: $' + R.abono;
+  $('#depV').textContent = R.it.pagoCompleto ? 'Pago completo, del 27 al 30 de nov.' : 'Abono: $' + R.abono;
 }
 
 document.addEventListener('click', e => {
@@ -623,7 +665,7 @@ $('#form').addEventListener('submit', e => {
     $('#fPlace').value.trim() ? '*Lugar:* ' + $('#fPlace').value.trim() : null,
     '*Forma de pago:* ' + pay,
     '*Total:* ' + R.total + (R.bs ? ' de referencia, en Bs. a tasa BCV del día' : ' (tarifa preferencial)'),
-    '*Abono para bloquear la fecha:* $' + R.abono,
+    R.it.pagoCompleto ? '*Promo Navidad:* ' + R.it.pagoCompleto : '*Abono para bloquear la fecha:* $' + R.abono,
     '*Nombre:* ' + $('#fName').value.trim(),
     $('#fNotes').value.trim() ? '*Notas:* ' + $('#fNotes').value.trim() : null,
     '',
