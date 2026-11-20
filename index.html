@@ -469,11 +469,11 @@ const CATS = [
 // (hora de Venezuela). Para verla antes de tiempo: abrir la web con ?promo=ver
 const PROMO = {
   visible:'2026-11-24', pagoHasta:'2026-11-30', cat:'social',
-  plan:{ id:'soft-glam-navidad', promo:true, nombre:'Soft Glam Edición Navidad', tag:'Precio especial pagando del 27 al 30 de noviembre', dur:'1 h 20 min',
+  plan:{ id:'soft-glam-navidad', promo:true, nombre:'Soft Signature Edición Navidad', tag:'Precio especial pagando del 27 al 30 de noviembre', dur:'1 h 20 min',
     d:50, b:60, antes:{ d:60, b:70 }, abono:0, pagoCompleto:'pago completo del 27 al 30 de noviembre', fmin:'2026-12-01', fmax:'2026-12-31',
-    desc:'Tu maquillaje para las fiestas de diciembre, a precio especial. Es el mismo Soft Glam de siempre: piel fresca y pulida, cejas enmarcadas, sellado de larga duración y pestañas personalizadas, listo para cenas, brindis y fotos.',
+    desc:'Tu maquillaje para las fiestas de diciembre, a precio especial. Es el mismo Soft Signature de siempre: piel fresca y pulida, cejas enmarcadas, sellado de larga duración y pestañas personalizadas, listo para cenas, brindis y fotos.',
     listaTitulo:'Condiciones',
-    incluye:['Aparta tu fecha desde hoy. Tu reserva queda confirmada con el pago','Precio especial pagando el servicio completo entre el viernes 27 y el lunes 30 de noviembre de 2026','Válido para maquillajes sociales Soft Glam con fecha del 1 al 31 de diciembre de 2026','Aplica solo en Maracay. No aplica para zonas aledañas','La fecha y la hora se confirman según disponibilidad','Después del 30 de noviembre aplica la tarifa regular'] }
+    incluye:['Aparta tu fecha desde hoy. Tu reserva queda confirmada con el pago','Precio especial pagando el servicio completo entre el viernes 27 y el lunes 30 de noviembre de 2026','Válido para maquillajes sociales Soft Signature con fecha del 1 al 31 de diciembre de 2026','Aplica solo en Maracay. No aplica para zonas aledañas','La fecha y la hora se confirman según disponibilidad','Después del 30 de noviembre aplica la tarifa regular'] }
 };
 const LAZO = '<svg viewBox="0 0 64 46" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 19c-6-9-16-13-22-10-5 3-4 14 2 17 6 3 14-1 20-7z"/><path d="M32 19c6-9 16-13 22-10 5 3 4 14-2 17-6 3-14-1-20-7z"/><path d="M30.500 21.500c-2 7-7 14-13 20M33.500 21.500c2 7 7 14 13 20"/><circle cx="32" cy="19.500" r="2.600"/></svg>';
 const promoOn = (() => {
@@ -513,7 +513,7 @@ function viewHome(){
     <h1>Maquillaje que empodera, confianza que <em>inspira</em>.</h1>
     <p>Elige lo que buscas para ver cada servicio con su inversión, y reserva tu fecha por WhatsApp en un minuto.</p>
   </section>
-  ${promoOn ? `<a class="promo-home" href="#navidad">${LAZO}<span><span class="e">Edición Navidad</span><span class="t">Tu Soft Glam de diciembre, a precio especial</span><span class="s">Pagando del 27 al 30 de noviembre</span></span><span class="go" aria-hidden="true">→</span></a>` : ''}
+  ${promoOn ? `<a class="promo-home" href="#navidad">${LAZO}<span><span class="e">Edición Navidad</span><span class="t">Tu Soft Signature de diciembre, a precio especial</span><span class="s">Pagando del 27 al 30 de noviembre</span></span><span class="go" aria-hidden="true">→</span></a>` : ''}
   <ul class="menu">
     ${CATS.map((c, i) => `<li><a href="#${c.id}">
       <span class="n">${String(i + 1).padStart(2, '0')}</span>
