@@ -118,6 +118,9 @@ details.plan[open] .from i .more{display:none}
 details.plan:not([open]) .from i .less{display:none}
 .plan-body{padding:0 18px 20px;border-top:1px solid var(--line)}
 .plan-body>p{margin:16px 0;color:var(--muted);font-size:.95rem}
+.plan-body>p+p{margin-top:-6px}
+.plan-body>p.nt b{color:var(--ink,#1A1716);font-weight:500}
+.cat-head p+p{margin-top:10px;font-size:1.05rem}
 .incl-t{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:8px}
 .incl{list-style:none;margin-bottom:18px}
 .incl li{position:relative;padding:5px 0 5px 20px;font-size:.92rem}
@@ -352,16 +355,21 @@ const PREGUNTAS = [
 
 const CATS = [
  { id:'social', nombre:'Social e invitadas', corto:'Social', linea:'Bodas, fiestas y eventos',
-   intro:'El equilibrio perfecto entre sofisticación y durabilidad para ser una invitada inolvidable sin restarle protagonismo al evento principal.',
+   intro:['El equilibrio perfecto entre sofisticación y durabilidad para ser una invitada inolvidable sin restarle protagonismo al evento principal.','Un look pensado para acompañarte con seguridad y presencia en cada celebración, ya sea con la frescura luminosa de Soft Signature o el impacto definido de Look Celebrity, con una piel cuidada y de buen comportamiento durante todo el evento.'],
    planes:[
-    { id:'soft-glam', nombre:'Soft Glam', tag:'Elegancia sutil y natural', dur:'1 h 20 min', d:60, b:70, abono:20,
+    { id:'soft-glam', nombre:'Soft Signature', tag:'Luminosidad natural, piel fresca y elegancia para día o noche', dur:'1 h 20 min', d:60, b:70, abono:20,
       fotos:['social-soft-glam-1.jpg','social-soft-glam-4.jpg'],
-      desc:'Un maquillaje fresco, pulido y de luminosidad controlada. Diseñado para realzar tus facciones de manera armónica, ideal para eventos de día, bautizos o celebraciones donde buscas una elegancia sin esfuerzo.',
+      desc:'Un maquillaje luminoso, limpio y favorecedor con el sello de Karelyn Makeup, diseñado para adaptarse con naturalidad tanto a la luz del día como a eventos de noche.',
+      notas:[['De día','se trabaja con mayor ligereza de texturas, rubores frescos y definición suave, para que se vea impecable a la luz natural y en fotos al aire libre.'],['De noche','se mantiene esa base limpia y luminosa de Soft Signature, pero se intensifica sutilmente la profundidad de la mirada, las pestañas o el rubor para que no se pierda bajo iluminación artificial.']],
       incluye:['Preparación de piel dermatológica previa','Diseño y enmarcado de cejas','Sellado de larga duración','Pestañas personalizadas: corridas de efecto natural o tipo cluster por segmentos','Guía de preparación "Skin Prep & Glow"'] },
-    { id:'full-glam', nombre:'Full Glam', tag:'Impacto y ojos protagonistas', dur:'2 h', d:80, b:95, abono:20,
+    { id:'full-glam', nombre:'Look Celebrity', tag:'Acabado de alto impacto, con el sello de Karelyn Makeup', dur:'2 h', d:80, b:95, abono:20,
       fotos:['social-full-glam-1.jpg','social-full-glam-3.jpg'],
-      desc:'Una declaración de estilo audaz y nocturna. Enfocado en magnificar la intensidad de tu mirada (ahumados definidos, toques de brillo o delineados impactantes), complementado con contornos precisos y un acabado deslumbrante.',
-      incluye:['Preparación de piel intensiva por zonas','Técnica de impermeabilización anti-sudor','Pestañas personalizadas: corridas o tipo cluster','Guía de preparación "Skin Prep & Glow"','Fotografía de recuerdo'] }
+      desc:['Hay momentos que piden ir con todo, con seguridad y presencia absoluta. Look Celebrity es el look diseñado para quienes quieren verse seguras y con protagonismo absoluto en su evento.','Enfocado en magnificar la intensidad de tu mirada (ahumados definidos, toques de brillo o delineados impactantes), complementado con contornos precisos y un acabado deslumbrante, lista para robar miradas sin perder el equilibrio ni el buen gusto.'],
+      incluye:['Preparación de piel intensiva por zonas','Técnica de impermeabilización anti-sudor','Pestañas personalizadas: corridas o tipo cluster','Guía de preparación "Skin Prep & Glow"','Fotografía de recuerdo'] },
+    { id:'business-woman', nombre:'Business Woman', tag:'Eventos corporativos, conferencias y presentaciones', dur:'1 h aprox. · A domicilio', d:50, b:60, abono:20,
+      desc:'Un acabado limpio, descansado y profesional para proyectar certeza y seguridad en reuniones de trabajo, ponencias, ruedas de prensa o grabaciones. Enfocado en emparejar el tono de la piel, corregir ojeras e imperfecciones con ligereza y mantener una expresión natural y pulida, sin ojos recargados ni labios oscuros.',
+      notas:[['Disponibilidad','lunes a viernes en horario matutino, sujeto a agenda y traslados en Maracay. Para otros días u horarios aplica la tarifa regular de servicio social.'],['Recomendaciones previas','tener el rostro limpio y sin maquillaje, contar con un espacio iluminado y confirmar la hora exacta de inicio.']],
+      incluye:['Preparación de piel adaptada a tu rostro, con corrección ligera de ojeras e imperfecciones','Unificación de piel, definición suave de cejas, rubor discreto y labial neutro o bálsamo con color','Pestañas personalizadas: corridas ligeras o clusters sutiles','Atención a domicilio en Maracay'] }
    ]},
  { id:'maduras', nombre:'Pieles maduras', corto:'Pieles maduras', linea:'Efecto lifting y luminosidad real', fotos:['pieles-maduras-2.jpg','pieles-maduras-3.jpg','pieles-maduras-4.jpg'],
    intro:'Un maquillaje diseñado para realzar tus facciones, elevar visualmente la mirada y devolver frescura a tu rostro sin marcar líneas de expresión ni recargar la piel.',
@@ -554,7 +562,7 @@ function viewCat(c){
   <header class="cat-head">
     <span class="eyebrow">${esc(c.linea)}</span>
     <h1>${esc(c.nombre)}</h1>
-    <p>${esc(c.intro)}</p>
+    ${[].concat(c.intro).map(x => `<p>${esc(x)}</p>`).join('')}
     ${c.fotos ? `<div class="pfotos cfotos n${c.fotos.length}">${c.fotos.map(f => `<img src="fotos/${f}" alt="${esc(c.nombre)}: trabajo realizado por Karelyn Makeup" loading="lazy" onerror="this.remove()">`).join('')}</div>` : ''}
     ${c.imagen ? `<img class="cover" src="${c.imagen}" alt="${esc(c.imagenAlt)}" loading="lazy" onerror="this.remove()">` : ''}
   </header>
@@ -568,7 +576,8 @@ function viewCat(c){
       <span class="from">${p.porPersona ? 'Por persona' : 'Preferencial'}<b>${p.antes ? `<s class="antes">${usd(p.antes.d)}</s>` : ''}${usd(p.d)}</b><i><span class="more">Ver detalle +</span><span class="less">Cerrar</span></i></span>
     </summary>
     <div class="plan-body">
-      <p>${esc(p.desc)}</p>
+      ${[].concat(p.desc).map(x => `<p>${esc(x)}</p>`).join('')}
+      ${p.notas ? p.notas.map(([t, d]) => `<p class="nt"><b>${esc(t)}:</b> ${esc(d)}</p>`).join('') : ''}
       <div class="incl-t">${esc(p.listaTitulo || 'Qué incluye')}</div>
       <ul class="incl">${p.incluye.map(x => `<li>${esc(x)}</li>`).join('')}${p.regalo ? `<li class="gift">${esc(p.regalo)}</li>` : ''}</ul>
       ${priceBox(p)}
