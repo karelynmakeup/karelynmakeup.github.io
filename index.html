@@ -119,6 +119,8 @@ details.plan:not([open]) .from i .less{display:none}
 .plan-body{padding:0 18px 20px;border-top:1px solid var(--line)}
 .plan-body>p{margin:16px 0;color:var(--muted);font-size:.95rem}
 .plan-body>p+p{margin-top:-6px}
+.incl li b{font-weight:500}
+.plan .from b.q{font-size:1.2rem;font-weight:500}
 .plan-body>p.nt b{color:var(--ink,#1A1716);font-weight:500}
 .cat-head p+p{margin-top:10px;font-size:1.05rem}
 .incl-t{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:8px}
@@ -395,13 +397,28 @@ const CATS = [
       desc:'Mirada protagonista y acabado de gala de alta definición fotográfica para destacar en la noche de tu graduación.',
       incluye:['Preparación intensiva de piel','Sellado blindado','Brillo y glow sutil en escote','Pestañas personalizadas: cluster o corridas ligeras','Guía de preparación "Skin Prep & Glow"'] }
    ]},
- { id:'novias', nombre:'Novias', corto:'Novias', linea:'The Bride Experience', fotos:['novias-7.jpg','novias-2.jpg','novias-3.jpg','novias-4.jpg','novias-5.jpg','novias-6.jpg'],
+ { id:'novias', nombre:'Novias', corto:'Novias', linea:'The Bride Experience', sub:'Elige tu experiencia', fotos:['novias-7.jpg','novias-2.jpg','novias-3.jpg','novias-4.jpg','novias-5.jpg','novias-6.jpg'],
    intro:'El arte de acompañarte en el día más importante de tu vida con un servicio impecable, pausado y diseñado para resistir emociones, abrazos y la alta definición fotográfica.',
    planes:[
     { id:'the-bride', nombre:'The Bride', tag:'Experiencia nupcial a domicilio', dur:'2 h 30 min · A domicilio', d:120, b:130, abono:50, abierto:true,
       desc:'Diseñada exclusivamente para tu preparación (Getting Ready) en hotel o en locación. Un servicio elegante y libre de prisas que se sincroniza con los tiempos del equipo de fotografía y video.',
       incluye:['Traslado dentro del perímetro de Maracay','Preparación profunda de la piel tipo spa con productos dermatológicos de alta gama','Maquillaje nupcial de alta resistencia: a prueba de lágrimas, calor y roces','Maquillaje de escote, hombros y clavícula con efecto glow radiante','Pestañas personalizadas: tipo cluster por segmentos o corridas de acabado natural o elegante','Cronograma de maquillaje coordinado con tu wedding planner o fotógrafo','Kit de retoque post-aplicación para toda la celebración'],
-      regalo:'Regalo al reservar: Guía Editorial The Bride (PDF), con el paso a paso de preparación de piel, cejas y logística previa a la boda.' }
+      regalo:'Regalo al reservar: Guía Editorial The Bride (PDF), con el paso a paso de preparación de piel, cejas y logística previa a la boda.' },
+    { id:'bodas-destino', cotiza:true, nombre:'Bodas Destino', tag:'Fuera de Maracay y en otros estados', dur:'The Bride · En tu destino',
+      desc:['Llevamos la experiencia The Bride hasta el lugar de tu celebración, dentro y fuera del estado Aragua: Choroní, Ocumare de la Costa, Tucacas y Morrocoy, Carabobo, Caracas, Margarita, entre otros destinos.','Para garantizar una atención impecable y puntual, los servicios fuera de Maracay se rigen por las siguientes condiciones.'],
+      notas:[['Cómo se organiza','ida y vuelta el mismo día en destinos cercanos; con pernocta, según la ruta y el horario, en destinos de costa y corta distancia; y con vuelo y estadía en destinos de larga distancia.']],
+      listaTitulo:'Condiciones de contratación',
+      incluye:[
+       ['Paquete mínimo','el servicio fuera de la ciudad se contrata con un paquete mínimo equivalente a la novia y cuatro acompañantes. Si tu grupo es más pequeño, el paquete se mantiene y puedes cederlo a quien tú elijas: mamá, madrina o damas.'],
+       ['Logística y viáticos','la clienta asume el traslado de ida y vuelta (combustible y peajes, transporte privado o boletos aéreos, según la distancia), el hospedaje en habitación privada cuando el horario o la ruta requieran pernocta, y la alimentación durante la estadía.'],
+       ['Pernocta','en la costa de Aragua (Choroní y Ocumare de la Costa) es necesaria cuando el servicio termina después de las 4:00 p. m.; en otros destinos, cuando el regreso implique carretera de noche o la ceremonia exija iniciar muy temprano.'],
+       ['Hospedaje','lo reserva la clienta, previa confirmación con nosotras: habitación privada, con aire acondicionado y cerca del lugar donde se arreglará la novia.'],
+       ['Equipo de apoyo','para grupos de más de cinco personas viajamos con una profesional de apoyo, y la logística se calcula para dos.'],
+       ['Retoques y acompañamiento','en destinos de playa o de clima húmedo podemos quedarnos hasta después de la ceremonia para retocar antes de la recepción. Se cotiza aparte, por horas, y puede requerir pernocta.'],
+       ['Destinos con vuelo','se incluye el equipaje facturado del kit profesional, que siempre viaja con nosotras.'],
+       ['Reserva y saldo','la fecha se bloquea con el 50 % del paquete de servicios más el 100 % de los gastos de logística. El saldo del servicio debe estar cancelado 5 días antes del evento.'],
+       ['Presupuesto','cada boda destino se cotiza a la medida y se presenta en dos bloques: servicios de maquillaje, y logística y viáticos estimados.']
+      ] }
    ],
    extrasNota:'Se solicitan por separado.',
    extras:[
@@ -563,6 +580,7 @@ function infoPagos(){
   </ul></details>`;
 }
 
+const COTIZA = ['Hola Karelyn! Quiero cotizar una boda destino.', '', '*Fecha:* ', '*Lugar exacto:* ', '*Hora de la ceremonia:* ', '*Personas a maquillar (con la novia):* ', '*Estilismo o peinado:* '].join('\n');
 function priceBox(p){
   const u = p.porPersona ? ' por persona' : (p.cu ? ' c/u' : '');
   return `<div class="prices">
@@ -581,22 +599,22 @@ function viewCat(c){
     ${c.fotos ? `<div class="pfotos cfotos n${c.fotos.length}">${c.fotos.map(f => `<img src="fotos/${f}" alt="${esc(c.nombre)}: trabajo realizado por Karelyn Makeup" loading="lazy" onerror="this.remove()">`).join('')}</div>` : ''}
     ${c.imagen ? `<img class="cover" src="${c.imagen}" alt="${esc(c.imagenAlt)}" loading="lazy" onerror="this.remove()">` : ''}
   </header>
-  <h2 class="sub">${c.cursos ? 'Elige tu nivel' : (c.planes.length > 1 ? 'Elige tu estilo' : 'La experiencia')}</h2>
+  <h2 class="sub">${c.cursos ? 'Elige tu nivel' : (c.sub || (c.planes.length > 1 ? 'Elige tu estilo' : 'La experiencia'))}</h2>
   ${c.planes.map(p => `
   ${p.fotos ? `<div class="pfotos n${p.fotos.length}">${p.fotos.map(f => `<img src="fotos/${f}" alt="Maquillaje ${esc(p.nombre)} realizado por Karelyn Makeup" loading="lazy" onerror="this.remove()">`).join('')}</div>` : ''}
   ${p.promo ? `<div class="promo-top" id="promo">${LAZO}<span class="e">Edición Navidad</span><span class="l">Un regalo para tus fiestas de diciembre</span></div>` : ''}
   <details class="plan${p.promo ? ' promo' : ''}" ${p.abierto ? 'open' : ''}>
     <summary>
       <span>${p.dur ? `<span class="dur">${esc(p.dur)}</span>` : ''}<span class="name">${esc(p.nombre)}</span><span class="tag">${esc(p.tag)}</span></span>
-      <span class="from">${p.porPersona ? 'Por persona' : 'Preferencial'}<b>${p.antes ? `<s class="antes">${usd(p.antes.d)}</s>` : ''}${usd(p.d)}</b><i><span class="more">Ver detalle +</span><span class="less">Cerrar</span></i></span>
+      <span class="from">${p.cotiza ? 'A la medida' : (p.porPersona ? 'Por persona' : 'Preferencial')}<b${p.cotiza ? ' class="q"' : ''}>${p.cotiza ? 'Se cotiza' : (p.antes ? `<s class="antes">${usd(p.antes.d)}</s>` : '') + usd(p.d)}</b><i><span class="more">Ver detalle +</span><span class="less">Cerrar</span></i></span>
     </summary>
     <div class="plan-body">
       ${[].concat(p.desc).map(x => `<p>${esc(x)}</p>`).join('')}
       ${p.notas ? p.notas.map(([t, d]) => `<p class="nt"><b>${esc(t)}:</b> ${esc(d)}</p>`).join('') : ''}
       <div class="incl-t">${esc(p.listaTitulo || 'Qué incluye')}</div>
-      <ul class="incl">${p.incluye.map(x => `<li>${esc(x)}</li>`).join('')}${p.regalo ? `<li class="gift">${esc(p.regalo)}</li>` : ''}</ul>
-      ${priceBox(p)}
-      <button class="btn" type="button" data-book="${c.id}/${p.id}">Reservar ${esc(p.nombre)}</button>
+      <ul class="incl">${p.incluye.map(x => `<li>${Array.isArray(x) ? `<b>${esc(x[0])}:</b> ${esc(x[1])}` : esc(x)}</li>`).join('')}${p.regalo ? `<li class="gift">${esc(p.regalo)}</li>` : ''}</ul>
+      ${p.cotiza ? `<a class="btn" target="_blank" rel="noopener" href="${waText(COTIZA)}">Solicitar cotización por WhatsApp</a>` : `${priceBox(p)}
+      <button class="btn" type="button" data-book="${c.id}/${p.id}">Reservar ${esc(p.nombre)}</button>`}
     </div>
   </details>`).join('')}
   ${c.extras ? `
