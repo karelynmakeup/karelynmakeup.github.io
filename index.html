@@ -190,6 +190,8 @@ dialog::backdrop{background:rgba(26,23,22,.55)}
 .picked b{font-family:var(--serif);font-size:1.4rem;font-weight:500;display:block;line-height:1.15}
 .picked span{font-size:.82rem;color:var(--muted)}
 .fl{display:block;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500;margin:18px 0 7px}
+.fh{font-size:.82rem;line-height:1.45;color:var(--muted);margin-top:8px}
+.fh:empty{display:none}
 .fl i{font-style:normal;color:var(--muted);letter-spacing:.04em;text-transform:none;font-weight:400}
 .in{width:100%;min-height:50px;padding:12px 14px;border:1px solid var(--line);background:var(--white);font-size:16px;border-radius:0;-webkit-appearance:none;appearance:none}
 .in:focus{outline:0;border-color:var(--accent)}
@@ -281,8 +283,9 @@ s.antes{font-size:.62em;color:var(--muted);text-decoration-thickness:1px;margin-
 
       <div class="two">
         <div><label class="fl" for="fDate">Fecha</label><input class="in" type="date" id="fDate" required></div>
-        <div><label class="fl" for="fTime" id="fTimeL">Hora en que debo estar lista</label><input class="in" type="time" id="fTime" required></div>
+        <div><label class="fl" for="fTime" id="fTimeL">Hora del evento</label><input class="in" type="time" id="fTime" required></div>
       </div>
+      <p class="fh" id="fTimeH"></p>
       <label class="fl" for="fName">Tu nombre</label>
       <input class="in" type="text" id="fName" autocomplete="name" required>
       <label class="fl" for="fPlace">Zona o lugar <i>(sector, hotel o locación)</i></label>
@@ -464,6 +467,15 @@ const CATS = [
    ]}
 ];
 
+// Campo de hora de la reserva: etiqueta y ayuda segun la seccion. Lo que no esta aqui usa `evento`.
+const HORA = {
+  evento:['Hora del evento', 'Indica la hora en que empieza tu evento. Con ese dato calculamos a qué hora debe estar listo tu maquillaje.'],
+  novias:['Hora de la ceremonia', 'Indica la hora de la ceremonia. Con ese dato calculamos a qué hora debe estar listo tu maquillaje.'],
+  quince:['Hora en que debo estar lista', 'Indica la hora en que la quinceañera debe estar lista, antes de salir a la fiesta.'],
+  foto:['Hora de la sesión', 'Indica la hora en que empieza la sesión o la producción.'],
+  cursos:['Hora preferida', '']
+};
+
 /* ============================== promo =============================== */
 // Promo de temporada. Aparece sola el dia `visible` y se quita sola al terminar `pagoHasta`
 // (hora de Venezuela). Para verla antes de tiempo: abrir la web con ?promo=ver
@@ -644,7 +656,9 @@ function openBooking(catId, itemId){
   $('#extrasList').innerHTML = ex.map(x => `
     <div class="stepper"><div class="l">${esc(x.nombre)}<small>${pr(x, x.d)} preferencial · ${usd(x.b)} en Bs.</small></div>
     <div class="qty"><button type="button" data-ex="${x.id}" data-step="-1" aria-label="Quitar">&minus;</button><output id="q-${x.id}">0</output><button type="button" data-ex="${x.id}" data-step="1" aria-label="Agregar">+</button></div></div>`).join('');
-  $('#fTimeL').textContent = c.cursos ? 'Hora preferida' : 'Hora en que debo estar lista';
+  const hora = HORA[c.id] || HORA.evento;
+  $('#fTimeL').textContent = hora[0];
+  $('#fTimeH').textContent = hora[1];
   const t = new Date(); t.setMinutes(t.getMinutes() - t.getTimezoneOffset());
   const hoy = t.toISOString().slice(0, 10);
   $('#fDate').min = it.fmin && it.fmin > hoy ? it.fmin : hoy;
