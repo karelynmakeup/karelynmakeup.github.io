@@ -142,6 +142,7 @@ details.plan:not([open]) .from i .less{display:none}
 
 .extra{display:grid;grid-template-columns:1fr auto;gap:6px 14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:start}
 .extra h3{font-size:1.3rem}
+.plan-body .extra:last-child{border-bottom:0;padding-bottom:0}
 .extra p{grid-column:1/-1;font-size:.9rem;color:var(--muted)}
 .extra .pr{text-align:right;font-family:var(--serif);font-size:1.35rem;font-weight:600;line-height:1.1;white-space:nowrap}
 .extra .pr small{display:block;font-family:var(--sans);font-size:.7rem;font-weight:400;color:var(--muted);margin-top:3px}
@@ -420,6 +421,10 @@ const CATS = [
        ['Presupuesto','cada boda destino se cotiza a la medida y se presenta en dos bloques: servicios de maquillaje, y logística y viáticos estimados.']
       ] }
    ],
+   grupos:[
+    { id:'estilismo', nombre:'Estilismo y Peinado', tag:'Para la novia, invitadas y cortejo', dur:'Aliados KMA · En tu locación',
+      desc:'Peinados coordinados con nuestro equipo de estilistas aliados, en la misma locación donde te maquillas. El valor final depende del estilo, el largo y la cantidad de cabello.' }
+   ],
    extrasNota:'Se solicitan por separado.',
    extras:[
     { id:'prueba', nombre:'Sesión de prueba (Bridal Preview)', d:60, b:70, abono:20,
@@ -428,14 +433,14 @@ const CATS = [
       desc:'Soft Signature o Belleza Atemporal, con efecto lifting inmediato y texturas hidratantes que no marcan líneas de expresión.' },
     { id:'cortejo', nombre:'Invitadas o cortejo, en tu locación', d:60, b:70, cu:true, abono:20,
       desc:'Maquillaje social en el mismo espacio de tu preparación para damas de honor o familiares cercanas. Sujeto a disponibilidad de horario.' },
-    { id:'peinado-novia', nombre:'Estilismo y peinado nupcial (Aliados KMA)', d:70, b:80, desde:true, abono:20,
-      desc:'Coordinado con nuestro equipo de estilistas aliados en tu misma locación. Incluye preparación de cabello, peinado, montaje de velo o tocado y guía de recomendaciones en PDF. El valor final depende del estilo, el largo y la cantidad de cabello.' },
-    { id:'ondas', nombre:'Estilismo para invitadas: Ondas', d:40, b:50, cu:true, desde:true, abono:20,
-      desc:'Peinado de ondas para invitadas, mamá o cortejo, con nuestro equipo de estilistas aliados en la misma locación. El valor final depende del largo y la cantidad de cabello.' },
-    { id:'semirrecogido', nombre:'Estilismo para invitadas: Semirrecogido', d:50, b:60, cu:true, desde:true, abono:20,
-      desc:'Peinado semirrecogido para invitadas, mamá o cortejo, con nuestro equipo de estilistas aliados en la misma locación. El valor final depende del largo y la cantidad de cabello.' },
-    { id:'recogido', nombre:'Estilismo para invitadas: Recogido', d:60, b:70, cu:true, desde:true, abono:20,
-      desc:'Peinado recogido para invitadas, mamá o cortejo, con nuestro equipo de estilistas aliados en la misma locación. El valor final depende del largo y la cantidad de cabello.' }
+    { id:'peinado-novia', g:'estilismo', nc:'Novia: Peinado nupcial', nombre:'Estilismo y peinado nupcial (Aliados KMA)', d:70, b:80, desde:true, abono:20,
+      desc:'Incluye preparación de cabello, peinado, montaje de velo o tocado y guía de recomendaciones en PDF.' },
+    { id:'ondas', g:'estilismo', nc:'Invitadas: Ondas', nombre:'Estilismo para invitadas: Ondas', d:40, b:50, cu:true, desde:true, abono:20,
+      desc:'Peinado de ondas para invitadas, mamá o cortejo.' },
+    { id:'semirrecogido', g:'estilismo', nc:'Invitadas: Semirrecogido', nombre:'Estilismo para invitadas: Semirrecogido', d:50, b:60, cu:true, desde:true, abono:20,
+      desc:'Peinado semirrecogido para invitadas, mamá o cortejo.' },
+    { id:'recogido', g:'estilismo', nc:'Invitadas: Recogido', nombre:'Estilismo para invitadas: Recogido', d:60, b:70, cu:true, desde:true, abono:20,
+      desc:'Peinado recogido para invitadas, mamá o cortejo.' }
    ]},
  { id:'quince', nombre:'Quince años', corto:'Quince años', linea:'Princesas KMA', fotos:['quince-3.jpg','quince-1.jpg','quince-4.jpg'],
    intro:'Un homenaje a la juventud, la ilusión y la elegancia. Maquillajes diseñados para que la quinceañera brille con luz propia, cómoda, fresca y segura durante toda su celebración.',
@@ -589,6 +594,16 @@ function priceBox(p){
   </div>`;
 }
 
+function extraRow(c, x, txt){
+  return `
+  <div class="extra">
+    <h3>${esc(x.nc || x.nombre)}</h3>
+    <div class="pr">${pr(x, x.d)}<small>${pr(x, x.b)} en Bs. BCV</small></div>
+    <p>${esc(x.desc)}</p>
+    <button type="button" data-book="${c.id}/${x.id}">${txt}</button>
+  </div>`;
+}
+
 function viewCat(c){
   const pol = c.cursos ? POLITICAS_CURSOS : POLITICAS_MAQUILLAJE;
   return `
@@ -617,16 +632,22 @@ function viewCat(c){
       <button class="btn" type="button" data-book="${c.id}/${p.id}">Reservar ${esc(p.nombre)}</button>`}
     </div>
   </details>`).join('')}
+  ${(c.grupos || []).map(g => { const xs = c.extras.filter(x => x.g === g.id); return `
+  <details class="plan" id="g-${g.id}">
+    <summary>
+      <span><span class="dur">${esc(g.dur)}</span><span class="name">${esc(g.nombre)}</span><span class="tag">${esc(g.tag)}</span></span>
+      <span class="from">Desde<b>${usd(Math.min(...xs.map(x => x.d)))}</b><i><span class="more">Ver detalle +</span><span class="less">Cerrar</span></i></span>
+    </summary>
+    <div class="plan-body">
+      <p>${esc(g.desc)}</p>
+      <div class="incl-t">Estilos disponibles</div>
+      ${xs.map(x => extraRow(c, x, 'Reservar este estilo')).join('')}
+    </div>
+  </details>`; }).join('')}
   ${c.extras ? `
   <h2 class="sub">Servicios adicionales</h2>
   <p class="sub-note">${esc(c.extrasNota)} Puedes sumarlos al reservar ${esc(c.planes[0].nombre)} o pedirlos aparte.</p>
-  ${c.extras.map(x => `
-  <div class="extra">
-    <h3>${esc(x.nombre)}</h3>
-    <div class="pr">${pr(x, x.d)}<small>${pr(x, x.b)} en Bs. BCV</small></div>
-    <p>${esc(x.desc)}</p>
-    <button type="button" data-book="${c.id}/${x.id}">Reservar solo este servicio</button>
-  </div>`).join('')}` : ''}
+  ${c.extras.filter(x => !x.g).map(x => extraRow(c, x, 'Reservar solo este servicio')).join('')}` : ''}
   ${c.cursos ? '' : `<section class="kit"><span class="eyebrow">Kit profesional y marcas de confianza</span><p class="a">Algunas de las marcas de mi kit</p><p class="m">${KIT.marcas.map(m => `<span>${esc(m)}</span>`).join(' ')}</p><p class="a o">entre otras marcas profesionales</p><p>${esc(KIT.texto)}</p></section>`}
   <h2 class="sub">${c.cursos ? 'Pagos y políticas' : 'Pagos, políticas y preguntas'}</h2>
   ${infoPagos()}
