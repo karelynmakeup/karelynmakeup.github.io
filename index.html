@@ -106,6 +106,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.12;text-wrap:bal
 .pfotos img:only-child{grid-column:1/-1;aspect-ratio:4/3}
 details.plan{background:var(--white);border:1px solid var(--line);margin-bottom:12px}
 details.plan[open]{border-color:var(--accent-soft)}
+details.plan.destino{background:#E8DCC9;border-color:var(--accent-soft);--accent:#6B4F24;--muted:#574E47;--line:#CDBB9C;margin:22px 0}
 details.plan summary{list-style:none;display:grid;grid-template-columns:1fr auto;gap:14px;padding:20px 18px;cursor:pointer;align-items:center;min-height:84px}
 details.plan summary::-webkit-details-marker{display:none}
 .plan .name{font-family:var(--serif);font-size:1.6rem;line-height:1.12;font-weight:500}
@@ -412,7 +413,7 @@ const CATS = [
       incluye:[
        ['Paquete mínimo','el servicio fuera de la ciudad se contrata con un paquete mínimo equivalente a la novia y cuatro acompañantes. Si tu grupo es más pequeño, el paquete se mantiene y puedes cederlo a quien tú elijas: mamá, madrina o damas.'],
        ['Logística y viáticos','la clienta asume el traslado de ida y vuelta (combustible y peajes, transporte privado o boletos aéreos, según la distancia), el hospedaje en habitación privada cuando el horario o la ruta requieran pernocta, y la alimentación durante la estadía.'],
-       ['Pernocta','en la costa de Aragua (Choroní y Ocumare de la Costa) es necesaria cuando el servicio termina después de las 4:00 p. m.; en otros destinos, cuando el regreso implique carretera de noche o la ceremonia exija iniciar muy temprano.'],
+       ['Pernocta','en la costa de Aragua (Choroní y Ocumare de la Costa) es necesaria cuando el servicio termina después de las 4:00 p. m., y también cuando esté lloviendo, sin importar la hora, por el riesgo que representa la carretera en esas condiciones; en otros destinos, cuando el regreso implique carretera de noche o la ceremonia exija iniciar muy temprano.'],
        ['Hospedaje','lo reserva la clienta, previa confirmación con nosotras: habitación privada, con aire acondicionado y cerca del lugar donde se arreglará la novia.'],
        ['Equipo de apoyo','para grupos de más de cinco personas viajamos con una profesional de apoyo, y la logística se calcula para dos.'],
        ['Retoques y acompañamiento','en destinos de playa o de clima húmedo podemos quedarnos hasta después de la ceremonia para retocar antes de la recepción. Se cotiza aparte, por horas, y siempre requiere pernocta.'],
@@ -618,7 +619,7 @@ function viewCat(c){
   ${c.planes.map(p => `
   ${p.fotos ? `<div class="pfotos n${p.fotos.length}">${p.fotos.map(f => `<img src="fotos/${f}" alt="Maquillaje ${esc(p.nombre)} realizado por Karelyn Makeup" loading="lazy" onerror="this.remove()">`).join('')}</div>` : ''}
   ${p.promo ? `<div class="promo-top" id="promo">${LAZO}<span class="e">Edición Navidad</span><span class="l">Un regalo para tus fiestas de diciembre</span></div>` : ''}
-  <details class="plan${p.promo ? ' promo' : ''}" ${p.abierto ? 'open' : ''}>
+  <details class="plan${p.promo ? ' promo' : ''}${p.cotiza ? ' destino' : ''}" ${p.abierto ? 'open' : ''}>
     <summary>
       <span>${p.dur ? `<span class="dur">${esc(p.dur)}</span>` : ''}<span class="name">${esc(p.nombre)}</span><span class="tag">${esc(p.tag)}</span></span>
       <span class="from">${p.cotiza ? 'A la medida' : (p.porPersona ? 'Por persona' : 'Preferencial')}<b${p.cotiza ? ' class="q"' : ''}>${p.cotiza ? 'Se cotiza' : (p.antes ? `<s class="antes">${usd(p.antes.d)}</s>` : '') + usd(p.d)}</b><i><span class="more">Ver detalle +</span><span class="less">Cerrar</span></i></span>
