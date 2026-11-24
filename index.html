@@ -117,6 +117,8 @@ details.plan summary::-webkit-details-marker{display:none}
 .plan .from i{display:block;font-style:normal;margin-top:8px;color:var(--accent);font-size:.68rem}
 details.plan[open] .from i .more{display:none}
 details.plan:not([open]) .from i .less{display:none}
+details.plan[open] .from b.v .more,details.plan:not([open]) .from b.v .less{display:none}
+.plan .from b.v{color:var(--accent);margin-top:6px}
 .plan-body{padding:0 18px 20px;border-top:1px solid var(--line)}
 .plan-body>p{margin:16px 0;color:var(--muted);font-size:.95rem}
 .plan-body>p+p{margin-top:-6px}
@@ -638,7 +640,7 @@ function viewCat(c){
   <details class="plan" id="g-${g.id}">
     <summary>
       <span><span class="dur">${esc(g.dur)}</span><span class="name">${esc(g.nombre)}</span><span class="tag">${esc(g.tag)}</span></span>
-      <span class="from">Desde<b>${usd(Math.min(...xs.map(x => x.d)))}</b><i><span class="more">Ver detalle +</span><span class="less">Cerrar</span></i></span>
+      <span class="from">Estilos y precios<b class="q v"><span class="more">Ver +</span><span class="less">Cerrar</span></b></span>
     </summary>
     <div class="plan-body">
       <p>${esc(g.desc)}</p>
