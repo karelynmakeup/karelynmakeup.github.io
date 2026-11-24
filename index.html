@@ -586,7 +586,7 @@ function infoPagos(){
   </ul></details>`;
 }
 
-const COTIZA = ['Hola Karelyn! Quiero cotizar una boda destino.', '', '*Fecha:* ', '*Lugar exacto:* ', '*Hora de la ceremonia:* ', '*Personas a maquillar (con la novia):* ', '*Estilismo o peinado:* '].join('\n');
+const COTIZA = ['Hola Karelyn! Quiero cotizar una boda destino.', '', '*Fecha:* ', '*Lugar exacto (ciudad, posada/hotel o venue):* ', '*Hora de la ceremonia y hora en que debemos estar listas:* ', '*Personas a maquillar (incluyendo la novia):* ', '*Peinado o estilismo:* ', '*Requiere retoques post-ceremonia?* '].join('\n');
 function priceBox(p){
   const u = p.porPersona ? ' por persona' : (p.cu ? ' c/u' : '');
   return `<div class="prices">
